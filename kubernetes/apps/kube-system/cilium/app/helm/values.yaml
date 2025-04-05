@@ -14,12 +14,8 @@ k8sServicePort: "6444"
 
 routingMode: "native"
 ipv4NativeRoutingCIDR: 10.42.0.0/16
-installNoConntrackIptablesRules: true
 
 autoDirectNodeRoutes: true
-
-endpointRoutes:
-  enabled: true
 
 gatewayAPI:
   enabled: true
