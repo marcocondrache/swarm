@@ -28,10 +28,6 @@ gatewayAPI:
 
 rollOutCiliumPods: true
 
-bandwidthManager:
-  enabled: true
-  bbr: true
-
 envoy:
   enabled: false
   rollOutEnvoyPods: false
@@ -40,15 +36,8 @@ operator:
   replicas: 1
   rollOutPods: true
 
-bpfClockProbe: true
-
 bpf:
   masquerade: true
-  datapathMode: netkit
-  preallocateMaps: true
-
-enableIPv4BIGTCP: true
-enableIPv6BIGTCP: true
 
 hubble:
   enabled: false
