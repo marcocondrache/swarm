@@ -1,0 +1,24 @@
+---
+# Main playbook for Raspberry Pi cluster setup and management
+
+- name: Configure all nodes
+  hosts: all
+  become: true
+  roles:
+    - common
+
+- name: Configure queen nodes
+  hosts: queens
+  become: true
+  tasks:
+    - name: Set hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+- name: Configure worker nodes
+  hosts: workers
+  become: true
+  tasks:
+    - name: Set hostname
+      hostname:
+        name: "{{ inventory_hostname }}"

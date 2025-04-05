@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.0/.schema/devbox.schema.json",
+  "packages": [
+    "ansible@latest",
+    "helmfile@latest",
+    "kubectl@latest",
+    "fluxcd@latest",
+    "k3sup@latest"
+  ],
+  "env": {
+    "HELM_PLUGINS": "$PWD/.devbox/nix/profile/default",
+    "KUBECONFIG":   "$PWD/kubeconfig",
+    "ROOT_DIR":     "$PWD"
+  }
+}

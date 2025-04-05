@@ -1,0 +1,17 @@
+---
+# Variables for all hosts
+
+# SSH user to connect with
+ansible_user: pi
+ansible_python_interpreter: /usr/bin/python3
+
+# Common packages to install on all nodes
+common_packages:
+  - vim
+  - htop
+  - git
+  - curl
+
+# System settings
+timezone: UTC
+locale: en_US.UTF-8 
