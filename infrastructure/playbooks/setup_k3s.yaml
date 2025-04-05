@@ -28,6 +28,7 @@
       --cluster-dns=10.43.0.10
       --cluster-cidr=10.42.0.0/16
       --service-cidr=10.43.0.0/16
+      --node-taint=node-role.kubernetes.io/control-plane:NoSchedule
       --disable=coredns
       --disable=traefik
       --disable=servicelb
@@ -54,7 +55,6 @@
         k3sup join \
           --ip {{ hostvars[item].ansible_host }} \
           --user {{ hostvars[item].ansible_user | default('pi') }} \
-          --no-extras \
           --server \
           --server-ip {{ first_queen_ip }} \
           --k3s-extra-args "{{ extra_args }}" \
