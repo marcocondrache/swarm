@@ -1,0 +1,23 @@
+---
+instance:
+  distribution:
+    # renovate: datasource=github-releases depName=controlplaneio-fluxcd/distribution
+    version: 2.5.1
+  cluster:
+    networkPolicy: false
+  components:
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+    - notification-controller
+  sync:
+    kind: GitRepository
+    provider: github
+    url: https://github.com/marcocondrache/swarm
+    ref: refs/heads/main
+    path: kubernetes/flux/cluster
+    pullSecret: github-app-secret
+    interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: flux

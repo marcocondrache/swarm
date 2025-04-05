@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+set: [pipefail]
+shopt: [globstar]
+
+vars:
+  KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
+  BOOTSTRAP_DIR: "{{.ROOT_DIR}}/kubernetes/bootstrap"
+  INFRASTRUCTURE_DIR: "{{.ROOT_DIR}}/infrastructure"
+
+  KUBECONFIG: "{{.ROOT_DIR}}/kubeconfig"
+
+includes:
+  bootstrap: .taskfiles/bootstrap
+
+tasks:
+  default:
+    cmd: task --list-all
+    silent: true

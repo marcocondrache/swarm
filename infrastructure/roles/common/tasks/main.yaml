@@ -9,12 +9,3 @@
 - name: Upgrade all packages
   apt:
     upgrade: dist
-    
-- name: Install common packages
-  apt:
-    name:
-      - vim
-      - htop
-      - git
-      - curl
-    state: present 

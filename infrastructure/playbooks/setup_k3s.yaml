@@ -1,0 +1,79 @@
+---
+- name: Configure cgroups on all nodes
+  hosts: all
+  become: true
+  tags: [ cgroups ]
+  tasks:
+    - name: Ensure cmdline.txt has cgroup settings
+      lineinfile:
+        path: /boot/firmware/cmdline.txt
+        regexp: '^(.*)rootwait(.*)$'
+        line: '\1rootwait cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\2'
+        backrefs: yes
+      register: cgroups_config
+    
+    - name: Reboot if cgroups settings were changed
+      ansible.builtin.reboot:
+        reboot_timeout: 300
+      when: cgroups_config.changed
+
+- name: Install k3s on queen nodes
+  hosts: localhost
+  connection: local
+  become: false
+  vars:
+    first_queen: "{{ groups['queens'][0] }}"
+    first_queen_ip: "{{ hostvars[first_queen].ansible_host }}"
+    extra_args: >-
+      --cluster-dns=10.43.0.10
+      --cluster-cidr=10.42.0.0/16
+      --service-cidr=10.43.0.0/16
+      --disable=coredns
+      --disable=traefik
+      --disable=servicelb
+      --disable=local-storage
+      --disable=metrics-server
+      --disable-kube-proxy
+      --disable-helm-controller
+      --disable-network-policy
+      --flannel-backend=none
+  tasks:
+    - name: Install k3s on first queen node
+      shell: |
+        k3sup install \
+          --ip {{ first_queen_ip }} \
+          --user {{ hostvars[first_queen].ansible_user | default('pi') }} \
+          --print-command \
+          --local-path ./kubeconfig \
+          --k3s-extra-args "{{ extra_args }}"
+      args:
+        creates: ./kubeconfig
+      
+    - name: Join additional queen nodes to the cluster (if any)
+      shell: |
+        k3sup join \
+          --ip {{ hostvars[item].ansible_host }} \
+          --user {{ hostvars[item].ansible_user | default('pi') }} \
+          --no-extras \
+          --server \
+          --server-ip {{ first_queen_ip }} \
+          --k3s-extra-args "{{ extra_args }}" \
+          --print-command
+      loop: "{{ groups['queens'][1:] }}"
+      when: groups['queens'] | length > 1
+
+- name: Join worker nodes to the cluster
+  hosts: localhost
+  connection: local
+  become: false
+  vars:
+    first_queen_ip: "{{ hostvars[groups['queens'][0]].ansible_host }}"
+  tasks:
+    - name: Join worker nodes to the cluster
+      shell: |
+        k3sup join \
+          --ip {{ hostvars[item].ansible_host }} \
+          --user {{ hostvars[item].ansible_user | default('pi') }} \
+          --server-ip {{ first_queen_ip }} \
+          --print-command
+      loop: "{{ groups['workers'] }}" 

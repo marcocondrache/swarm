@@ -4,9 +4,9 @@
 queens:
   hosts:
     queen1:
-      ansible_host: 192.168.1.1      
+      ansible_host: 192.168.0.120      
 
 workers:
   hosts:
     worker1:
-      ansible_host: 192.168.1.2
+      ansible_host: 192.168.0.191

@@ -1,0 +1,54 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
+ipam:
+  mode: kubernetes
+
+k8s:
+  requireIPv4PodCIDR: true
+
+kubeProxyReplacement: true
+kubeProxyReplacementHealthzBindAddr: "0.0.0.0:10256"
+
+k8sServiceHost: "127.0.0.1"
+k8sServicePort: "6444"
+
+routingMode: "native"
+ipv4NativeRoutingCIDR: 10.42.0.0/16
+installNoConntrackIptablesRules: true
+
+autoDirectNodeRoutes: true
+
+endpointRoutes:
+  enabled: true
+
+gatewayAPI:
+  enabled: true
+  enableAlpn: true
+  xffNumTrustedHops: 1
+
+rollOutCiliumPods: true
+
+bandwidthManager:
+  enabled: true
+  bbr: true
+
+envoy:
+  enabled: false
+  rollOutEnvoyPods: false
+
+operator:
+  replicas: 1
+  rollOutPods: true
+
+bpfClockProbe: true
+
+bpf:
+  masquerade: true
+  datapathMode: netkit
+  preallocateMaps: true
+
+enableIPv4BIGTCP: true
+enableIPv6BIGTCP: true
+
+hubble:
+  enabled: false

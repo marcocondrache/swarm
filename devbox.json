@@ -5,11 +5,17 @@
     "helmfile@latest",
     "kubectl@latest",
     "fluxcd@latest",
-    "k3sup@latest"
+    "k3sup@latest",
+    "_1password-cli@latest",
+    "go-task@latest",
+    "minijinja@latest",
+    "kubernetes-helm@latest",
+    "kubernetes-helmPlugins.helm-diff@latest"
   ],
   "env": {
     "HELM_PLUGINS": "$PWD/.devbox/nix/profile/default",
     "KUBECONFIG":   "$PWD/kubeconfig",
     "ROOT_DIR":     "$PWD"
-  }
+  },
+  "env_from": ".env"
 }
