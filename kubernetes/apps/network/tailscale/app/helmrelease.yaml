@@ -47,17 +47,17 @@ spec:
 
     operatorConfig:
       logging: debug
-      hostname: "hive-operator"
+      hostname: "swarm-operator"
       podAnnotations:
         reloader.stakater.com/auto: "true"
       defaultTags:
-        - "tag:hive-operator"
+        - "tag:swarm-operator"
       extraEnv:
         - name: PORT
           value: "41641"
 
     proxyConfig:
-      defaultTags: "tag:hive"
+      defaultTags: "tag:swarm"
       defaultProxyClass: "default"
 
     apiServerProxyConfig:
