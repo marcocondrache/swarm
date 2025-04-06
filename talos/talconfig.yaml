@@ -1,0 +1,63 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+clusterName: swarm
+
+endpoint: https://192.168.0.51:6443
+
+talosVersion: v1.9.5
+kubernetesVersion: v1.32.3
+
+additionalApiServerCertSans: &sans
+  - 192.168.0.51
+  - 127.0.0.1
+
+additionalMachineCertSans: *sans
+
+clusterPodNets: [10.42.0.0/16]
+clusterSvcNets: [10.43.0.0/16]
+
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: queen-ysfx
+    ipAddress: &queen-ip 192.168.0.51
+    controlPlane: true
+    installDisk: /dev/sda
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "e4:5f:01:7f:34:fe"
+        mtu: 1500
+        dhcp: true
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.0.1
+        addresses:
+          - *queen-ip
+
+  - hostname: worker-ugxz
+    ipAddress: &worker-ip 192.168.0.52
+    controlPlane: false
+    installDisk: /dev/sda
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "e4:5f:01:de:64:e1"
+        mtu: 1500
+        dhcp: true
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.0.1
+        addresses:
+          - *worker-ip
+
+controlPlane:
+  patches:
+    - "@./patches/controlplane/cluster.yaml"
+    - "@./patches/controlplane/admission-controller-patch.yaml"
+
+patches:
+  - "@./patches/common/machine-udev.yaml"
+  - "@./patches/common/machine-time.yaml"
+  - "@./patches/common/machine-network.yaml"
+  - "@./patches/common/machine-kubelet.yaml"
+  - "@./patches/common/machine-files.yaml"

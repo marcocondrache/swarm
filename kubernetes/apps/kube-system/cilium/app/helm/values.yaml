@@ -1,5 +1,9 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
+cluster:
+  id: 1
+  name: main
+
 ipam:
   mode: kubernetes
 
@@ -9,8 +13,14 @@ k8s:
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: "0.0.0.0:10256"
 
-k8sServiceHost: "127.0.0.1"
-k8sServicePort: "6444"
+cni:
+  exclusive: false
+
+k8sServiceHost: 127.0.0.1
+k8sServicePort: 7445
+
+endpointRoutes:
+  enabled: true
 
 routingMode: "native"
 ipv4NativeRoutingCIDR: 10.42.0.0/16
@@ -24,16 +34,49 @@ gatewayAPI:
 
 rollOutCiliumPods: true
 
+l2announcements:
+  enabled: true
+
 envoy:
-  enabled: false
-  rollOutEnvoyPods: false
+  rollOutPods: true
+
+enableIPv4BIGTCP: true
 
 operator:
   replicas: 1
   rollOutPods: true
 
+bpfClockProbe: true
+
+bandwidthManager:
+  enabled: true
+  bbr: true
+
 bpf:
+  datapathMode: netkit
   masquerade: true
+  preallocateMaps: true
 
 hubble:
   enabled: false
+
+securityContext:
+  capabilities:
+    ciliumAgent:
+      - CHOWN
+      - KILL
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - PERFMON
+      - BPF
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    cleanCiliumState:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE

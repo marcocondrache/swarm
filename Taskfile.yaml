@@ -6,14 +6,15 @@ set: [pipefail]
 shopt: [globstar]
 
 vars:
+  TALOS_DIR: "{{.ROOT_DIR}}/talos"
   KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
-  BOOTSTRAP_DIR: "{{.ROOT_DIR}}/kubernetes/bootstrap"
-  INFRASTRUCTURE_DIR: "{{.ROOT_DIR}}/infrastructure"
+  BOOTSTRAP_DIR: "{{.KUBERNETES_DIR}}/bootstrap"
 
   KUBECONFIG: "{{.ROOT_DIR}}/kubeconfig"
 
 includes:
   bootstrap: .taskfiles/bootstrap
+  talos: .taskfiles/talos/Taskfile.yaml
 
 tasks:
   default:

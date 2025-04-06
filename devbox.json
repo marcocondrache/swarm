@@ -10,12 +10,15 @@
     "go-task@latest",
     "minijinja@latest",
     "kubernetes-helm@latest",
-    "kubernetes-helmPlugins.helm-diff@latest"
+    "kubernetes-helmPlugins.helm-diff@latest",
+    "talosctl@latest",
+    "github:budimanjojo/talhelper"
   ],
   "env": {
     "HELM_PLUGINS": "$PWD/.devbox/nix/profile/default",
-    "KUBECONFIG":   "$PWD/kubeconfig",
-    "ROOT_DIR":     "$PWD"
+    "KUBECONFIG": "$PWD/kubeconfig",
+    "TALOSCONFIG": "$PWD/talos/clusterconfig/talosconfig",
+    "ROOT_DIR": "$PWD"
   },
   "env_from": ".env"
 }

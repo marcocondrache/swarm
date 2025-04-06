@@ -67,16 +67,23 @@ spec:
         connections:
           requireMsgr2: true
       storage:
-        useAllNodes: true
+        useAllNodes: false
         useAllDevices: false
         config:
           osdsPerDevice: "1"
+        nodes:
+          - name: queen-ysfx
+            devices:
+              - name: /dev/sdb
+          - name: worker-ugxz
+            devices:
+              - name: /dev/sdb
     cephBlockPools:
       - name: ceph-blockpool
         spec:
           failureDomain: host
           replicated:
-            size: 3
+            size: 2
         storageClass:
           enabled: true
           name: ceph-block
@@ -86,9 +93,8 @@ spec:
           volumeBindingMode: Immediate
           mountOptions: ["discard"]
           parameters:
-            # TODO: Consider enabling compression on cluster rebuild
-            # compression_mode: aggressive
-            # compression_algorithm: zstd
+            compression_mode: aggressive
+            compression_algorithm: zstd
             imageFormat: "2"
             imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock
             csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
@@ -103,7 +109,5 @@ spec:
       name: csi-ceph-blockpool
       isDefault: false
       deletionPolicy: Delete
-    # NOTE: After disabling the filesystem, the filesystem can be removed with the following commands:
-    # ceph fs fail ceph-filesystem && ceph fs rm ceph-filesystem --yes-i-really-mean-it
     cephFileSystems: []
     cephObjectStores: []
